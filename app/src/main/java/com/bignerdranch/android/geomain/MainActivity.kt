@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         Question(R.string.question_asia, true)
     )
     private var currentIndex = 0
+    private val listOfIndex = mutableListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +51,9 @@ class MainActivity : AppCompatActivity() {
 //            toast.setGravity(Gravity.TOP, 0, 0)
 //            toast.show()
             checkAnswer(true)
+            listOfIndex.add(currentIndex)
+            trueButton.isEnabled = false
+            falseButton.isEnabled = false
         }
         falseButton.setOnClickListener { view: View ->
 //            val toast = Toast.makeText(
@@ -60,11 +64,16 @@ class MainActivity : AppCompatActivity() {
 //            toast.setGravity(Gravity.TOP, 0, 0)
 //            toast.show()
             checkAnswer(false)
+            listOfIndex.add(currentIndex)
+            trueButton.isEnabled = false
+            falseButton.isEnabled = false
 
         }
         nextButton.setOnClickListener {
             currentIndex = (currentIndex + 1) % questionBank.size
+            checkQuestionIndex(currentIndex)
             updateQuestion()
+
         }
         questionTextView.setOnClickListener {
             currentIndex = (currentIndex + 1) % questionBank.size
@@ -73,8 +82,9 @@ class MainActivity : AppCompatActivity() {
         previousButton.setOnClickListener {
             if (currentIndex > 0) {
                 currentIndex = (currentIndex - 1) % questionBank.size
-                updateQuestion()
             } else currentIndex += questionBank.size - 1
+
+            checkQuestionIndex(currentIndex)
             updateQuestion()
         }
         updateQuestion()
@@ -108,6 +118,17 @@ class MainActivity : AppCompatActivity() {
     private fun updateQuestion() {
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
+    }
+
+    private fun checkQuestionIndex(index: Int) {
+        if (listOfIndex.contains(index)) {
+            trueButton.isEnabled = false
+            falseButton.isEnabled = false
+        } else {
+            trueButton.isEnabled = true
+            falseButton.isEnabled = true
+        }
+
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
