@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     )
     private var currentIndex = 0
     private val listOfIndex = mutableListOf<Int>()
+    private var countOfCorrectAnswers =0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +52,11 @@ class MainActivity : AppCompatActivity() {
 //            toast.setGravity(Gravity.TOP, 0, 0)
 //            toast.show()
             checkAnswer(true)
+
             listOfIndex.add(currentIndex)
             trueButton.isEnabled = false
             falseButton.isEnabled = false
+            correctAnswerPercentage(listOfIndex.size,countOfCorrectAnswers)
         }
         falseButton.setOnClickListener { view: View ->
 //            val toast = Toast.makeText(
@@ -67,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             listOfIndex.add(currentIndex)
             trueButton.isEnabled = false
             falseButton.isEnabled = false
+            correctAnswerPercentage(listOfIndex.size,countOfCorrectAnswers)
 
         }
         nextButton.setOnClickListener {
@@ -119,6 +123,12 @@ class MainActivity : AppCompatActivity() {
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
     }
+    private fun correctAnswerPercentage(size:Int,countOfAnswers:Int){
+        if (questionBank.size==size){
+            val a =countOfAnswers.toFloat()/(size.toFloat()/100)
+            Toast.makeText(this, "percentage of correct answers: $a",Toast.LENGTH_LONG).show()
+        }
+    }
 
     private fun checkQuestionIndex(index: Int) {
         if (listOfIndex.contains(index)) {
@@ -134,6 +144,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkAnswer(userAnswer: Boolean) {
         val correctAnswer = questionBank[currentIndex].answer
         val messageResId = if (userAnswer == correctAnswer) {
+            countOfCorrectAnswers++
             R.string.correct_toast
         } else {
             R.string.incorrect_toast
