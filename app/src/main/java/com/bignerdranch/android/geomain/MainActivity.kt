@@ -8,6 +8,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 
 private const val TAG = "MainActivity"
 
@@ -19,15 +21,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var previousButton: ImageButton
     private lateinit var questionTextView: TextView
 
-    private val questionBank = listOf(
-        Question(R.string.question_australia, true),
-        Question(R.string.question_oceans, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_africa, false),
-        Question(R.string.question_americas, true),
-        Question(R.string.question_asia, true)
-    )
-    private var currentIndex = 0
+    private val quizViewModel: QuizViewModel by lazy {
+        ViewModelProviders.of(this).get(QuizViewModel::class.java)
+    }
     private val listOfIndex = mutableListOf<Int>()
     private var countOfCorrectAnswers =0;
 
