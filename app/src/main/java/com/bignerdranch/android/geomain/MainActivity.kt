@@ -11,28 +11,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 
+
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
 
-class MainActivity : AppCompatActivity() {
+private const val TRUE_BUTTON ="trueButton"
+private const val FALSE_BUTTON ="falseButton"
 
+class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
     private lateinit var nextButton: ImageButton
     private lateinit var previousButton: ImageButton
-    private lateinit var questionTextView: TextView
 
+    private lateinit var questionTextView: TextView
     private val quizViewModel: QuizViewModel by lazy {
         ViewModelProviders.of(this).get(QuizViewModel::class.java)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
-        val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
-        quizViewModel.currentIndex = currentIndex
 
 
         trueButton = findViewById(R.id.true_button)
@@ -75,6 +75,20 @@ class MainActivity : AppCompatActivity() {
         updateQuestion()
     }
 
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        Log.i(TAG, "onSaveInstanceState")
+        savedInstanceState.putBoolean(TRUE_BUTTON,trueButton.isEnabled)
+        savedInstanceState.putBoolean(FALSE_BUTTON,falseButton.isEnabled)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        trueButton.isEnabled = savedInstanceState.getBoolean(TRUE_BUTTON)
+        falseButton.isEnabled = savedInstanceState.getBoolean(FALSE_BUTTON)
+        Log.i(TAG, "onRestoreInstanceState")
+    }
+
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart() called")
@@ -84,15 +98,9 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Log.d(TAG, "onResume() called")
     }
-
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause() called")
-    }
-    override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        super.onSaveInstanceState(savedInstanceState)
-        Log.i(TAG, "onSaveInstanceState")
-        savedInstanceState.putInt(KEY_INDEX, quizViewModel.currentIndex)
     }
 
     override fun onStop() {
@@ -139,5 +147,4 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
             .show()
     }
-
 }

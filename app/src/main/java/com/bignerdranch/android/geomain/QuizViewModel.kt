@@ -20,7 +20,7 @@ class QuizViewModel : ViewModel() {
     val questionBankSize: Int
     get() = questionBank.size
 
-    val listOfIndex = mutableListOf<Int>()
+    var listOfIndex = mutableListOf<Int>()
     var countOfCorrectAnswers = 0
 
     fun moveToNext() {
