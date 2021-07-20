@@ -33,7 +33,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
-
+        val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
+        quizViewModel.currentIndex = currentIndex
+//        Log.d(TAG, "$currentIndex"
 
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
@@ -78,6 +80,8 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         Log.i(TAG, "onSaveInstanceState")
+        Log.i(TAG, "${quizViewModel.currentIndex}")
+        savedInstanceState.putInt(KEY_INDEX, quizViewModel.currentIndex)
         savedInstanceState.putBoolean(TRUE_BUTTON,trueButton.isEnabled)
         savedInstanceState.putBoolean(FALSE_BUTTON,falseButton.isEnabled)
     }
