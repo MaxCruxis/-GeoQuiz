@@ -1,5 +1,6 @@
 package com.bignerdranch.android.geomain
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 
+const val EXTRA_ANSWER_SHOWN = "com.bignerdranch.android.geoquiz.answer_shown"
 private const val EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.geoquiz.answer_is_true"
 
 class CheatActivity : AppCompatActivity() {
@@ -28,6 +30,7 @@ class CheatActivity : AppCompatActivity() {
                 else -> R.string.false_button
             }
             answerTextView.setText(answerText)
+            setAnswerShownResult(true)
         }
     }
     companion object {
@@ -36,5 +39,11 @@ class CheatActivity : AppCompatActivity() {
                 putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue)
             }
         }
+    }
+    private fun setAnswerShownResult(isAnswerShown: Boolean) {
+        val data = Intent().apply {
+            putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown)
+        }
+        setResult(Activity.RESULT_OK, data)
     }
 }

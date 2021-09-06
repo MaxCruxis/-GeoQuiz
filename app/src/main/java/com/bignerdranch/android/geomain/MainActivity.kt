@@ -18,6 +18,7 @@ private const val KEY_INDEX = "index"
 
 private const val TRUE_BUTTON ="trueButton"
 private const val FALSE_BUTTON ="falseButton"
+private const val REQUEST_CODE_CHEAT = 0
 
 class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
@@ -81,7 +82,8 @@ class MainActivity : AppCompatActivity() {
         cheatButton.setOnClickListener {
             val answerIsTrue = quizViewModel.currentQuestionAnswer
             val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
-            startActivity(intent)
+//            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_CHEAT)
         }
     }
 
