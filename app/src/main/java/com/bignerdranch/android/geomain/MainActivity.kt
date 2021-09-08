@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -16,8 +17,8 @@ import androidx.lifecycle.ViewModelProviders
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
 
-private const val TRUE_BUTTON ="trueButton"
-private const val FALSE_BUTTON ="falseButton"
+private const val TRUE_BUTTON = "trueButton"
+private const val FALSE_BUTTON = "falseButton"
 private const val REQUEST_CODE_CHEAT = 0
 
 class MainActivity : AppCompatActivity() {
@@ -53,14 +54,20 @@ class MainActivity : AppCompatActivity() {
             quizViewModel.listOfIndex.add(quizViewModel.currentIndex)
             trueButton.isEnabled = false
             falseButton.isEnabled = false
-            correctAnswerPercentage(quizViewModel.listOfIndex.size, quizViewModel.countOfCorrectAnswers)
+            correctAnswerPercentage(
+                quizViewModel.listOfIndex.size,
+                quizViewModel.countOfCorrectAnswers
+            )
         }
         falseButton.setOnClickListener {
             checkAnswer(false)
             quizViewModel.listOfIndex.add(quizViewModel.currentIndex)
             trueButton.isEnabled = false
             falseButton.isEnabled = false
-            correctAnswerPercentage(quizViewModel.listOfIndex.size, quizViewModel.countOfCorrectAnswers)
+            correctAnswerPercentage(
+                quizViewModel.listOfIndex.size,
+                quizViewModel.countOfCorrectAnswers
+            )
 
         }
         nextButton.setOnClickListener {
@@ -81,20 +88,30 @@ class MainActivity : AppCompatActivity() {
         updateQuestion()
         cheatButton.setOnClickListener {
             val answerIsTrue = quizViewModel.currentQuestionAnswer
-            val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+//            val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
 //            startActivity(intent)
-            startActivityForResult(intent, REQUEST_CODE_CHEAT)
+//            startActivityForResult(intent, REQUEST_CODE_CHEAT)
+
+            val intent = Intent(this, CheatActivity::class.java)
+            resultLauncher.launch(intent)
         }
     }
 
+    val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == REQUEST_CODE_CHEAT) {
+                val data: Intent? = result.data
+
+            }
+        }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         Log.i(TAG, "onSaveInstanceState")
         Log.i(TAG, "${quizViewModel.currentIndex}")
         savedInstanceState.putInt(KEY_INDEX, quizViewModel.currentIndex)
-        savedInstanceState.putBoolean(TRUE_BUTTON,trueButton.isEnabled)
-        savedInstanceState.putBoolean(FALSE_BUTTON,falseButton.isEnabled)
+        savedInstanceState.putBoolean(TRUE_BUTTON, trueButton.isEnabled)
+        savedInstanceState.putBoolean(FALSE_BUTTON, falseButton.isEnabled)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -113,6 +130,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Log.d(TAG, "onResume() called")
     }
+
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause() called")
