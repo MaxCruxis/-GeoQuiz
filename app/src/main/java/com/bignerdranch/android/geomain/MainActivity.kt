@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    val resultLauncher =
+    private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == REQUEST_CODE_CHEAT) {
                 val data: Intent? = result.data
